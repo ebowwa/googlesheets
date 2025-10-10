@@ -15,8 +15,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from sheets_cli import GoogleSheetsCLI
 
-# Configuration
-SHEET_ID = "1OxJTCXOM1X0VP6sprPz-fXm_-RZtNSTMXJ4SNCdGYBM"
+# Configuration - Set as environment variable
+SHEET_ID = os.getenv('GOOGLE_SHEET_ID')
 WORKSHEET_NAME = "daily"
 
 # Date to row mapping (adjust based on your sheet structure)

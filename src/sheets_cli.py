@@ -31,7 +31,7 @@ except ImportError as e:
     sys.exit(1)
 
 # Configuration
-SHEET_ID = os.getenv('GOOGLE_SHEET_ID', '1OxJTCXOM1X0VP6sprPz-fXm_-RZtNSTMXJ4SNCdGYBM')
+SHEET_ID = os.getenv('GOOGLE_SHEET_ID')
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 class GoogleSheetsCLI:
