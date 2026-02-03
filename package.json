@@ -5,13 +5,13 @@
   "author": "Ebowwa Labs <labs@ebowwa.com>",
   "license": "MIT",
   "type": "module",
-  "homepage": "https://github.com/ebowwa/google-sheets-cli#readme",
+  "homepage": "https://github.com/ebowwa/googlesheets#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ebowwa/google-sheets-cli.git"
+    "url": "git+https://github.com/ebowwa/googlesheets.git"
   },
   "bugs": {
-    "url": "https://github.com/ebowwa/google-sheets-cli/issues"
+    "url": "https://github.com/ebowwa/googlesheets/issues"
   },
   "keywords": [
     "google-sheets",

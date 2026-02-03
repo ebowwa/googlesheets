@@ -28,8 +28,8 @@ bun add -g @ebowwa/googlesheets
 ### From source
 
 ```bash
-git clone https://github.com/ebowwa/google-sheets-cli.git
-cd google-sheets-cli
+git clone https://github.com/ebowwa/googlesheets.git
+cd googlesheets
 bun install
 bun run build
 ```
