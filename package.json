@@ -1,18 +1,43 @@
 {
-  "name": "google-sheets-cli",
+  "name": "@ebowwa/googlesheets",
   "version": "0.1.0",
-  "description": "CLI tool for programmatic Google Sheets access with secure credential management and git history analysis",
+  "description": "CLI tool for programmatic Google Sheets access with OAuth authentication and git history analysis",
   "author": "Ebowwa Labs <labs@ebowwa.com>",
   "license": "MIT",
   "type": "module",
+  "homepage": "https://github.com/ebowwa/google-sheets-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebowwa/google-sheets-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ebowwa/google-sheets-cli/issues"
+  },
+  "keywords": [
+    "google-sheets",
+    "sheets",
+    "cli",
+    "gspread",
+    "productivity",
+    "git",
+    "analytics"
+  ],
   "bin": {
     "sheets-cli": "./dist/cli/index.js",
-    "git-analyzer": "./dist/cli/git-analyzer.js"
+    "git-analyzer": "./dist/cli/git-analyzer.js",
+    "oauth-setup": "./dist/cli/oauth-setup.js",
+    "create-sheet": "./dist/cli/create-via-drive.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "bun build ./src/cli/index.ts --outdir ./dist --target node --banner '/*#!/usr/bin/env node*/' && bun build ./src/cli/git-analyzer.ts --outdir ./dist --target node",
+    "build": "bun build ./src/cli/index.ts --outdir ./dist/cli --target node --banner '/*#!/usr/bin/env node*/' && bun build ./src/cli/git-analyzer.ts --outdir ./dist/cli --target node --banner '/*#!/usr/bin/env node*/' && bun build ./src/cli/oauth-setup.ts --outdir ./dist/cli --target node --banner '/*#!/usr/bin/env node*/' && bun build ./src/cli/create-via-drive.ts --outdir ./dist/cli --target node --banner '/*#!/usr/bin/env node*/'",
     "dev": "bun run src/cli/index.ts",
     "dev:git": "bun run src/cli/git-analyzer.ts",
+    "prepublishOnly": "bun run build",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -25,5 +50,11 @@
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "exports": {
+    "./package.json": "./package.json"
   }
 }
