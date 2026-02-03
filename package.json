@@ -31,7 +31,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun build ./src/cli/index.ts --outdir ./dist/cli --target node --banner '/*#!/usr/bin/env node*/' && bun build ./src/cli/oauth-setup.ts --outdir ./dist/cli --target node --banner '/*#!/usr/bin/env node*/' && bun build ./src/cli/create-via-drive.ts --outdir ./dist/cli --target node --banner '/*#!/usr/bin/env node*/'",
+    "build": "tsc",
     "dev": "bun run src/cli/index.ts",
     "prepublishOnly": "bun run build",
     "typecheck": "tsc --noEmit"

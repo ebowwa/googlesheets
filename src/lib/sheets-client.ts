@@ -15,7 +15,7 @@ import { createDriveClient, getSheetId as getServiceSheetId } from './auth.js';
 export class GoogleSheetsClient {
   private client!: OAuth2Client | JWT;
   private sheets: any;
-  private spreadsheetId: string;
+  private spreadsheetId!: string;
 
   private constructor() {}
 

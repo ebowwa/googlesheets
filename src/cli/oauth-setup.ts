@@ -1,10 +1,10 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 /**
  * OAuth Setup - Run the OAuth flow to get tokens
  */
 
 import { config } from 'dotenv';
-import { serve } from 'bun';
+import * as http from 'node:http';
 import { getAuthUrl, exchangeCodeForTokens, loadOAuthConfig } from '../lib/oauth-auth.js';
 
 config();
@@ -21,26 +21,23 @@ async function runOAuthFlow() {
   console.log('3. You will be redirected back\n');
 
   // Start a simple server to handle the callback
-  const server = serve({
-    port: PORT,
-    async fetch(req) {
-      const url = new URL(req.url);
+  const server = http.createServer(async (req, res) => {
+    const url = new URL(req.url!, `http://localhost:${PORT}`);
 
-      if (url.pathname === '/callback') {
-        const code = url.searchParams.get('code');
+    if (url.pathname === '/callback') {
+      const code = url.searchParams.get('code');
 
-        if (!code) {
-          const error = url.searchParams.get('error');
-          return new Response(
-            `Authorization failed: ${error || 'Unknown error'}`,
-            { status: 400 }
-          );
-        }
+      if (!code) {
+        const error = url.searchParams.get('error');
+        res.writeHead(400, { 'Content-Type': 'text/html' });
+        res.end(`Authorization failed: ${error || 'Unknown error'}`);
+        return;
+      }
 
-        try {
-          const tokens = await exchangeCodeForTokens(code);
+      try {
+        const tokens = await exchangeCodeForTokens(code);
 
-          const response = `
+        const response = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,25 +64,24 @@ doppler secrets set GOOGLE_OAUTH_TOKEN_EXPIRY "${tokens.expiry_date}" -c prd` : 
   <button class="copy-btn" onclick="window.close()">Close</button>
 </body>
 </html>
-          `;
+        `;
 
-          return new Response(response, {
-            headers: { 'Content-Type': 'text/html' },
-          });
-        } catch (error) {
-          return new Response(
-            `Error exchanging code: ${(error as Error).message}`,
-            { status: 500 }
-          );
-        }
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(response);
+      } catch (error) {
+        res.writeHead(500, { 'Content-Type': 'text/html' });
+        res.end(`Error exchanging code: ${(error as Error).message}`);
       }
-
-      return new Response('Not found', { status: 404 });
-    },
+    } else {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Not found');
+    }
   });
 
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log('Waiting for authorization callback...\n');
+  server.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log('Waiting for authorization callback...\n');
+  });
 }
 
 try {
