@@ -41,6 +41,24 @@ export function createAuthenticatedClient(): JWT {
 }
 
 /**
+ * Create a JWT client with Drive scope (for creating spreadsheets)
+ */
+export function createDriveClient(): JWT {
+  const credentials = loadServiceAccountCredentials();
+
+  const client = new JWT({
+    email: credentials.client_email,
+    key: credentials.private_key,
+    scopes: [
+      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/drive',
+    ],
+  });
+
+  return client;
+}
+
+/**
  * Get the Google Sheet ID from environment variable
  */
 export function getSheetId(): string {

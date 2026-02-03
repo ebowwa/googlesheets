@@ -3,23 +3,41 @@
  */
 
 import { google } from 'googleapis';
-import type { JWT } from 'google-auth-library';
+import type { OAuth2Client, JWT } from 'google-auth-library';
 import type {
   CellData,
   RowData,
   SpreadsheetInfo,
 } from '../types/index.js';
-import { createAuthenticatedClient, getSheetId } from './auth.js';
+import { createOAuthClient, getSheetId as getOAuthSheetId } from './oauth-auth.js';
+import { createDriveClient, getSheetId as getServiceSheetId } from './auth.js';
 
 export class GoogleSheetsClient {
-  private client: JWT;
+  private client!: OAuth2Client | JWT;
   private sheets: any;
   private spreadsheetId: string;
 
-  constructor() {
-    this.client = createAuthenticatedClient();
-    this.sheets = google.sheets({ version: 'v4', auth: this.client });
-    this.spreadsheetId = getSheetId();
+  private constructor() {}
+
+  /**
+   * Create a new GoogleSheetsClient instance
+   * Tries OAuth first, falls back to service account
+   */
+  static async create(): Promise<GoogleSheetsClient> {
+    const instance = new GoogleSheetsClient();
+
+    // Try OAuth first (preferred for personal use)
+    try {
+      instance.client = await createOAuthClient();
+      instance.spreadsheetId = getOAuthSheetId();
+    } catch {
+      // Fall back to service account
+      instance.client = createDriveClient();
+      instance.spreadsheetId = getServiceSheetId();
+    }
+
+    instance.sheets = google.sheets({ version: 'v4', auth: instance.client });
+    return instance;
   }
 
   /**

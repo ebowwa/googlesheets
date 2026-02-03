@@ -11,7 +11,10 @@ import { GoogleSheetsClient } from '../lib/sheets-client.js';
 config();
 
 const program = new Command();
-const client = new GoogleSheetsClient();
+
+async function getClient() {
+  return await GoogleSheetsClient.create();
+}
 
 program
   .name('sheets-cli')
@@ -24,6 +27,7 @@ program
   .description('Get spreadsheet information')
   .action(async () => {
     try {
+      const client = await getClient();
       const info = await client.getSpreadsheetInfo();
       console.log(JSON.stringify(info, null, 2));
     } catch (error) {
@@ -39,6 +43,7 @@ program
   .argument('[range]', 'Cell range (default: Sheet1!A1:Z1000)', 'Sheet1!A1:Z1000')
   .action(async (range: string) => {
     try {
+      const client = await getClient();
       const data = await client.getWorksheetData(range);
       console.log(JSON.stringify(data, null, 2));
     } catch (error) {
@@ -55,6 +60,7 @@ program
   .argument('<value>', 'Value to set')
   .action(async (range: string, value: string) => {
     try {
+      const client = await getClient();
       await client.updateCell(range, value);
       console.log(`Updated ${range} to "${value}"`);
     } catch (error) {
@@ -71,6 +77,7 @@ program
   .argument('<notes>', 'Notes content')
   .action(async (row: string, notes: string) => {
     try {
+      const client = await getClient();
       const rowNum = parseInt(row, 10);
       const range = `daily!C${rowNum}`;
       await client.updateCell(range, notes);
@@ -88,6 +95,7 @@ program
   .argument('<sheetName>', 'Name of the new sheet')
   .action(async (sheetName: string) => {
     try {
+      const client = await getClient();
       await client.createWorksheet(sheetName);
       console.log(`Created worksheet: ${sheetName}`);
     } catch (error) {
@@ -102,6 +110,7 @@ program
   .description('List all worksheets')
   .action(async () => {
     try {
+      const client = await getClient();
       const sheets = await client.listWorksheets();
       console.log('Worksheets:');
       for (const sheet of sheets) {
