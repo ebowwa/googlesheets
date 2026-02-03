@@ -1,0 +1,29 @@
+{
+  "name": "google-sheets-cli",
+  "version": "0.1.0",
+  "description": "CLI tool for programmatic Google Sheets access with secure credential management and git history analysis",
+  "author": "Ebowwa Labs <labs@ebowwa.com>",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "sheets-cli": "./dist/cli/index.js",
+    "git-analyzer": "./dist/cli/git-analyzer.js"
+  },
+  "scripts": {
+    "build": "bun build ./src/cli/index.ts --outdir ./dist --target node --banner '/*#!/usr/bin/env node*/' && bun build ./src/cli/git-analyzer.ts --outdir ./dist --target node",
+    "dev": "bun run src/cli/index.ts",
+    "dev:git": "bun run src/cli/git-analyzer.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "google-auth-library": "^9.11.0",
+    "googleapis": "^144.0.0",
+    "simple-git": "^3.27.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -6,11 +6,10 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+pip-wheel-metadata/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -19,6 +18,16 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
+pyproject.toml
+
+# Node
+node_modules/
+bower_components/
+
+# TypeScript/Bun
+dist/
+*.tsbuildinfo
 
 # Environment
 .env
@@ -47,7 +56,13 @@ Thumbs.db
 
 # Service accounts (keep templates, remove actual keys)
 *.json
+!package.json
+!package-lock.json
+!tsconfig.json
 !config/*.json.template
+
+# Analysis output
+git_analysis.json
 
 # Temporary files
 *.tmp
