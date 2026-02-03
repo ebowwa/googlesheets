@@ -148,7 +148,6 @@ src/
 
 ## Dependencies
 
-- `commander` - CLI framework
 - `googleapis` - Google APIs
 - `google-auth-library` - Authentication
 - `dotenv` - Environment variables

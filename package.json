@@ -1,6 +1,6 @@
 {
   "name": "@ebowwa/googlesheets",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "CLI tool for programmatic Google Sheets access with OAuth authentication",
   "author": "Ebowwa Labs <labs@ebowwa.com>",
   "license": "MIT",
@@ -37,7 +37,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "google-auth-library": "^9.11.0",
     "googleapis": "^144.0.0"
