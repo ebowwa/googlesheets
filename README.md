@@ -1,6 +1,6 @@
 # @ebowwa/googlesheets
 
-A TypeScript CLI tool for programmatic Google Sheets access with OAuth authentication and git history analysis.
+A TypeScript CLI tool for programmatic Google Sheets access with OAuth authentication.
 
 ## Features
 
@@ -8,21 +8,12 @@ A TypeScript CLI tool for programmatic Google Sheets access with OAuth authentic
 - Fallback to service account support
 - Google Sheets API access
 - Google Drive API for creating spreadsheets
-- Git history analysis for productivity tracking
 - Doppler integration for credential management
 
 ## Installation
 
-### npm
-
 ```bash
-npm install -g @ebowwa/googlesheets
-```
-
-### bun
-
-```bash
-bun add -g @ebowwa/googlesheets
+bun install -g @ebowwa/googlesheets
 ```
 
 ### From source
@@ -99,22 +90,6 @@ sheets-cli create "NewSheet"
 sheets-cli list-sheets
 ```
 
-### Git Analyzer
-
-```bash
-# Analyze git history
-git-analyzer
-
-# With custom date range
-git-analyzer --start-date 2025-01-01 --end-date 2025-01-31
-
-# Custom repos directory
-git-analyzer --repos-dir ~/projects
-
-# Discover repositories only
-git-analyzer --discover
-```
-
 ### Create Spreadsheets
 
 ```bash
@@ -139,13 +114,6 @@ oauth-setup
 - `create <sheet_name>` - Create new worksheet
 - `list-sheets` - List all worksheets
 
-**git-analyzer**
-- `--start-date <date>` - Start date (YYYY-MM-DD)
-- `--end-date <date>` - End date (YYYY-MM-DD)
-- `--repos-dir <path>` - Repositories directory
-- `--output <file>` - Output file (default: git_analysis.json)
-- `--discover` - Only discover repositories
-
 **create-sheet**
 - `<title>` - Spreadsheet title (optional, default: "New Spreadsheet")
 
@@ -161,7 +129,6 @@ oauth-setup
 | `GOOGLE_OAUTH_CLIENT_SECRET` | Yes | OAuth 2.0 Client Secret |
 | `GOOGLE_OAUTH_REFRESH_TOKEN` | Yes | OAuth refresh token |
 | `GOOGLE_SHEET_ID` | Yes | Target spreadsheet ID |
-| `REPOS_DIR` | No | Directory containing git repositories |
 
 ## Project Structure
 
@@ -169,14 +136,12 @@ oauth-setup
 src/
 ├── cli/
 │   ├── index.ts          # Main CLI (sheets-cli)
-│   ├── git-analyzer.ts   # Git analyzer CLI
 │   ├── oauth-setup.ts    # OAuth setup script
 │   └── create-via-drive.ts  # Spreadsheet creator
 ├── lib/
 │   ├── oauth-auth.ts     # OAuth authentication
 │   ├── auth.ts           # Service account auth (fallback)
-│   ├── sheets-client.ts  # Google Sheets API client
-│   └── git-analyzer.ts   # Git history analyzer
+│   └── sheets-client.ts  # Google Sheets API client
 └── types/
     └── index.ts          # TypeScript types
 ```
@@ -186,7 +151,6 @@ src/
 - `commander` - CLI framework
 - `googleapis` - Google APIs
 - `google-auth-library` - Authentication
-- `simple-git` - Git operations
 - `dotenv` - Environment variables
 
 ## License

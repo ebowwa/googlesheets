@@ -36,46 +36,6 @@ export interface RowData {
 }
 
 /**
- * Git Analyzer types
- */
-
-export interface GitCommit {
-  hash: string;
-  date: string;
-  message: string;
-  author: string;
-  repository: string;
-}
-
-export interface DailyNote {
-  date: string;
-  note: string;
-  commitCount: number;
-  firstCommit?: string;
-  lastCommit?: string;
-}
-
-export interface GitAnalysisResult {
-  metadata: {
-    startDate: string;
-    endDate: string;
-    reposDir: string;
-    repositoryCount: number;
-    totalCommits: number;
-  };
-  dailyNotes: DailyNote[];
-  commits: GitCommit[];
-}
-
-export interface AnalyzerOptions {
-  startDate?: string;
-  endDate?: string;
-  reposDir?: string;
-  output?: string;
-  discover?: boolean;
-}
-
-/**
  * CLI types
  */
 
