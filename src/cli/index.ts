@@ -18,7 +18,7 @@ function showHelp() {
 sheets-cli - CLI tool for programmatic Google Sheets access
 
 VERSION
-  sheets-cli 0.2.0
+  sheets-cli 0.3.1
 
 USAGE
   sheets-cli <command> [options]
@@ -46,7 +46,7 @@ EXAMPLES
 }
 
 function showVersion() {
-  console.log('sheets-cli 0.2.0');
+  console.log('sheets-cli 0.3.1');
 }
 
 async function main() {

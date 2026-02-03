@@ -1,6 +1,6 @@
 {
   "name": "@ebowwa/googlesheets",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "CLI tool for programmatic Google Sheets access with OAuth authentication",
   "author": "Ebowwa Labs <labs@ebowwa.com>",
   "license": "MIT",
