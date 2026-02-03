@@ -1,63 +1,135 @@
-# Google Sheets CLI
+# @ebowwa/googlesheets
 
-A TypeScript CLI tool for programmatic Google Sheets access using service accounts and Doppler for secure credential management.
+A TypeScript CLI tool for programmatic Google Sheets access with OAuth authentication and git history analysis.
 
 ## Features
 
-- Secure Google Sheets API access via service accounts
-- Doppler integration for credential management
+- OAuth2 authentication (personal Google account)
+- Fallback to service account support
+- Google Sheets API access
+- Google Drive API for creating spreadsheets
 - Git history analysis for productivity tracking
-- CLI commands for reading/writing sheet data
+- Doppler integration for credential management
+
+## Installation
+
+### npm
+
+```bash
+npm install -g @ebowwa/googlesheets
+```
+
+### bun
+
+```bash
+bun add -g @ebowwa/googlesheets
+```
+
+### From source
+
+```bash
+git clone https://github.com/ebowwa/googlesheets.git
+cd googlesheets
+bun install
+bun run build
+```
 
 ## Setup
 
-### Prerequisites
+### 1. Create OAuth 2.0 Credentials
 
-1. Create a Google Cloud service account
-2. Enable Google Sheets API
-3. Download service account JSON key
-4. Share your Google Sheet with the service account email
-5. Install [Bun](https://bun.sh)
+Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials):
+1. Create a new **OAuth 2.0 Client ID** (Web application)
+2. Add redirect URI: `http://localhost:3000/callback`
+3. Add your email as a test user
+4. Save the Client ID and Secret
 
-### Installation
+### 2. Run OAuth Setup
 
 ```bash
-# Clone and set up
-git clone https://github.com/ebowwa/google-sheets-cli.git
-cd google-sheets-cli
-bun install
-
-# Add service account to Doppler
-doppler secrets set GOOGLE_SERVICE_ACCOUNT_JSON "$(cat /path/to/service-account.json)" --project <project-name>
-doppler secrets set GOOGLE_SHEET_ID "your-sheet-id" --project <project-name>
+oauth-setup
 ```
 
-### Usage
+Or manually:
+```bash
+export GOOGLE_OAUTH_CLIENT_ID="your-client-id"
+export GOOGLE_OAUTH_CLIENT_SECRET="your-client-secret"
+oauth-setup
+```
+
+### 3. Set Environment Variables
+
+Using Doppler:
+```bash
+doppler secrets set GOOGLE_OAUTH_CLIENT_ID "your-client-id" -c prd
+doppler secrets set GOOGLE_OAUTH_CLIENT_SECRET "your-client-secret" -c prd
+doppler secrets set GOOGLE_OAUTH_REFRESH_TOKEN "your-refresh-token" -c prd
+doppler secrets set GOOGLE_SHEET_ID "your-sheet-id" -c prd
+```
+
+Or with `.env`:
+```bash
+GOOGLE_OAUTH_CLIENT_ID=your-client-id
+GOOGLE_OAUTH_CLIENT_SECRET=your-client-secret
+GOOGLE_OAUTH_REFRESH_TOKEN=your-refresh-token
+GOOGLE_SHEET_ID=your-sheet-id
+```
+
+## Usage
+
+### Sheets CLI
 
 ```bash
-# Get sheet info
-doppler run -- bun run src/cli/index.ts info
+# Get spreadsheet info
+sheets-cli info
 
-# Get data
-doppler run -- bun run src/cli/index.ts get "Sheet1!A1:C10"
+# Get data from a range
+sheets-cli get "Sheet1!A1:C10"
 
 # Update a cell
-doppler run -- bun run src/cli/index.ts update "Sheet1!A1" "New value"
+sheets-cli update "Sheet1!A1" "New value"
 
-# Create worksheet
-doppler run -- bun run src/cli/index.ts create "NewSheet"
+# Update notes column
+sheets-cli update-notes 5 "Today's notes"
 
-# List worksheets
-doppler run -- bun run src/cli/index.ts list-sheets
+# Create a new worksheet
+sheets-cli create "NewSheet"
 
-# Analyze git history
-bun run src/cli/git-analyzer.ts
-
-# Update productivity tracker
-doppler run -- bun run examples/productivity_tracker.ts
+# List all worksheets
+sheets-cli list-sheets
 ```
 
-### CLI Commands
+### Git Analyzer
+
+```bash
+# Analyze git history
+git-analyzer
+
+# With custom date range
+git-analyzer --start-date 2025-01-01 --end-date 2025-01-31
+
+# Custom repos directory
+git-analyzer --repos-dir ~/projects
+
+# Discover repositories only
+git-analyzer --discover
+```
+
+### Create Spreadsheets
+
+```bash
+# Create a new spreadsheet (in your Drive)
+create-sheet "My New Spreadsheet"
+```
+
+### OAuth Setup
+
+```bash
+# Run OAuth flow to get tokens
+oauth-setup
+```
+
+## CLI Commands
 
 **sheets-cli**
 - `info` - Get spreadsheet information
@@ -74,23 +146,35 @@ doppler run -- bun run examples/productivity_tracker.ts
 - `--output <file>` - Output file (default: git_analysis.json)
 - `--discover` - Only discover repositories
 
-## Configuration
+**create-sheet**
+- `<title>` - Spreadsheet title (optional, default: "New Spreadsheet")
 
-### Environment Variables
+**oauth-setup**
+- Opens browser for OAuth authorization
+- Generates refresh token for CLI use
 
-- `GOOGLE_SERVICE_ACCOUNT_JSON` - Service account credentials (from Doppler)
-- `GOOGLE_SHEET_ID` - Target spreadsheet ID (from Doppler)
-- `REPOS_DIR` - Directory containing git repositories (default: /Users/ebowwa/apps)
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GOOGLE_OAUTH_CLIENT_ID` | Yes | OAuth 2.0 Client ID |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | Yes | OAuth 2.0 Client Secret |
+| `GOOGLE_OAUTH_REFRESH_TOKEN` | Yes | OAuth refresh token |
+| `GOOGLE_SHEET_ID` | Yes | Target spreadsheet ID |
+| `REPOS_DIR` | No | Directory containing git repositories |
 
 ## Project Structure
 
 ```
 src/
 ├── cli/
-│   ├── index.ts          # Main CLI entry point (sheets-cli)
-│   └── git-analyzer.ts   # Git analyzer CLI
+│   ├── index.ts          # Main CLI (sheets-cli)
+│   ├── git-analyzer.ts   # Git analyzer CLI
+│   ├── oauth-setup.ts    # OAuth setup script
+│   └── create-via-drive.ts  # Spreadsheet creator
 ├── lib/
-│   ├── auth.ts           # Authentication helpers
+│   ├── oauth-auth.ts     # OAuth authentication
+│   ├── auth.ts           # Service account auth (fallback)
 │   ├── sheets-client.ts  # Google Sheets API client
 │   └── git-analyzer.ts   # Git history analyzer
 └── types/
@@ -100,15 +184,11 @@ src/
 ## Dependencies
 
 - `commander` - CLI framework
-- `googleapis` - Google Sheets API
+- `googleapis` - Google APIs
 - `google-auth-library` - Authentication
 - `simple-git` - Git operations
 - `dotenv` - Environment variables
 
-## Security
-
-Uses Doppler for secure credential management - no hardcoded secrets in the repository.
-
 ## License
 
-MIT
+MIT © Ebowwa Labs
