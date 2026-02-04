@@ -8,7 +8,7 @@ import type {
   CellData,
   RowData,
   SpreadsheetInfo,
-} from '../types/index.js';
+} from '@ebowwa/codespaces-types/compile';
 import { createOAuthClient, getSheetId as getOAuthSheetId } from './oauth-auth.js';
 import { createDriveClient, getSheetId as getServiceSheetId } from './auth.js';
 

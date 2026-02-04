@@ -5,20 +5,23 @@
   "author": "Ebowwa Labs <labs@ebowwa.com>",
   "license": "MIT",
   "type": "module",
-  "homepage": "https://github.com/ebowwa/googlesheets#readme",
+  "homepage": "https://github.com/ebowwa/codespaces/tree/main/packages/src/googlesheets#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ebowwa/googlesheets.git"
+    "url": "https://github.com/ebowwa/codespaces.git",
+    "directory": "packages/src/googlesheets"
   },
   "bugs": {
-    "url": "https://github.com/ebowwa/googlesheets/issues"
+    "url": "https://github.com/ebowwa/codespaces/issues"
   },
   "keywords": [
     "google-sheets",
     "sheets",
     "cli",
     "gspread",
-    "productivity"
+    "productivity",
+    "oauth",
+    "api"
   ],
   "bin": {
     "sheets-cli": "./dist/cli/index.js",

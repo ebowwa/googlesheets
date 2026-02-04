@@ -3,7 +3,7 @@
  */
 
 import { JWT } from 'google-auth-library';
-import type { ServiceAccountCredentials } from '../types/index.js';
+import type { ServiceAccountCredentials } from '@ebowwa/codespaces-types/compile';
 
 /**
  * Load and parse service account credentials from environment variable
